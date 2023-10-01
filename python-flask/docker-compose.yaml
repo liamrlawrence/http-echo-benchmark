@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  benchmark-python-flask:
+    restart: always
+    container_name: benchmark-python-flask_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+      network: host
+    ports:
+      - 2000:2000
+    networks:
+      benchmark-network:
+        ipv4_address: 172.20.0.200
+
+
+networks:
+  benchmark-network:
+    external: true
+    name: benchmark-net
+    ipam:
+      driver: bridge
+      config:
+        - subnet: 172.20.0.1/16
+
