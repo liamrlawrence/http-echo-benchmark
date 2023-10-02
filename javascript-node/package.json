@@ -1,0 +1,12 @@
+{
+  "name": "node-echo-benchmark",
+  "version": "1.0.0",
+  "description": "Node echo benchmark",
+  "main": "src/main.js",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "author": "Liam Lawrence",
+  "license": "MIT"
+}
+

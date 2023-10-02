@@ -6,5 +6,5 @@ COPY . .
 RUN pip install --no-cache -r requirements.txt
 
 EXPOSE 2000
-CMD ["python", "/app/src/main.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:2000", "--chdir", "src", "main:app"]
 

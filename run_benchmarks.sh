@@ -2,7 +2,7 @@
 
 
 # Setup
-BENCHMARKS=("python-flask" "rust-axum" "go-chi")
+BENCHMARKS=("javascript-node" "python-flask" "rust-axum" "go-chi")
 NUM_REQUESTS=10000
 CONCURRENCY=100
 
