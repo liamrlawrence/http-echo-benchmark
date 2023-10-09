@@ -21,7 +21,7 @@ COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --recipe-path recipe.json
 
 COPY . .
-RUN cargo build --bin app
+RUN cargo build --bin app --release
 
 
 
@@ -32,7 +32,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     ca-certificates libssl-dev
 
-COPY --from=builder /app/target/debug/app /usr/local/bin
+COPY --from=builder /app/target/release/app /usr/local/bin
 
 EXPOSE 2000
 CMD ["/usr/local/bin/app"]

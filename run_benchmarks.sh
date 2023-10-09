@@ -6,16 +6,16 @@ BENCHMARKS=("javascript-node" "python-flask" "rust-axum" "go-chi")
 NUM_REQUESTS=10000
 CONCURRENCY=100
 
-URL="172.20.0.200"
+IP="0.0.0.0"
 PORT=":2000"
 ENDPOINT="/api/echo"
+API_URL="http://${IP}${PORT}${ENDPOINT}"
 BODY='{"strings": "Hello, World!", "ints": -1, "floats": 3.14, "bools": {"t": true, "f": false}, "nil": null}'
 
 
 DATE=$(date "+%Y-%b-%d_%H%M%S")
 mkdir -p benchmarks/${DATE}
 echo $BODY > .body.json
-sudo docker network create --gateway 172.20.0.1 --subnet 172.20.0.1/16 benchmark-net > /dev/null
 
 
 
@@ -27,11 +27,11 @@ for BENCHMARK in "${BENCHMARKS[@]}"; do
     CONTAINER="benchmark-${BENCHMARK}"
     cd $BENCHMARK
 
-    sudo docker compose build
-    sudo docker compose run \
+    sudo docker build -t $CONTAINER .
+    sudo docker run \
         -d \
         --rm \
-        --service-ports \
+        -p "2000:2000" \
         --name=${CONTAINER} \
         $CONTAINER > /dev/null
     sleep 1
@@ -41,8 +41,9 @@ for BENCHMARK in "${BENCHMARKS[@]}"; do
         -c $CONCURRENCY \
         -p ../.body.json \
         -T 'application/json' \
-        http://${URL}${PORT}${ENDPOINT} \
+        $API_URL \
         > ../benchmarks/${DATE}/${BENCHMARK}.log
+
 
     sudo docker kill $CONTAINER > /dev/null
     cd ..
@@ -54,5 +55,5 @@ done
 
 # Cleanup
 rm .body.json
-sudo docker network rm benchmark-net > /dev/null
+echo "Benchmark completed"
 
